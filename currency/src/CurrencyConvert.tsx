@@ -22,27 +22,34 @@ export interface ICurrencyConvertData{
 }
 
 export interface ICurrencyConvertProps{
-    data: ICurrencyConvertData;
-    onGo:(data: ICurrencyConvertData)=>void;
+    onGo:()=>void;
     
 }
 
 export function CurrencyConvert(props: ICurrencyConvertProps){
-    const [isPremium, setIsPremium] = useState(props.data.options.premium);
-    const [isFast, setIsFast] = useState(props.data.options.fast);
+    const [isPremium, setIsPremium] = useState(false);
+    const [isFast, setIsFast] = useState(false);
 
     let handleGoClick=()=>{
         console.log('сделка');
-        props.onGo(props.data);
+        props.onGo();
     };
 
-    let handleFromOnChange=(val: CurrencyVal)=>{
-        props.data.from=val;
-        console.log('CurrencyConvert: handleFromOnChange '+props.data.from);
+    const handleFromUserChangeVal=()=>{
+
+    }
+
+    const handleToUserChangeVal=()=>{
+
+    }
+
+    let handleFromOnChange=()=>{
+
+        console.log('CurrencyConvert: handleFromOnChange ');
     };
-    let handleToOnChange=(val: CurrencyVal)=>{
-        props.data.to=val;
-        console.log('CurrencyConvert: handleFromOnChange '+props.data.to);
+    let handleToOnChange=()=>{
+
+        console.log('CurrencyConvert: handleFromOnChange ');
     };
 
     const handlePremiumOptionsChange=(e:any)=>{
@@ -56,28 +63,30 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
     }
 
     const handleFromToCalc=()=>{
-        const val=calculateExchange(getKnownCurrencies()[props.data.from.valType], getKnownCurrencies()[props.data.to.valType], props.data.from.value, props.data.options);
-        props.data.to.value=val;
-        console.log('calculated from-to '+val);
+//        const val=calculateExchange(getKnownCurrencies()[0], getKnownCurrencies()[0], 0, props.data.options);
+ 
+        console.log('calculated from-to ');
     }
     const handleToFromCalc=()=>{
-        const val=calculateExchange(getKnownCurrencies()[props.data.to.valType], getKnownCurrencies()[props.data.from.valType], props.data.to.value, props.data.options);
-        props.data.from.value=val;
-        console.log('calculated to-from '+val);
+//        const val=calculateExchange(getKnownCurrencies()[props.data.to.valType], getKnownCurrencies()[props.data.from.valType], props.data.to.value, props.data.options);
+
+        console.log('calculated to-from ');
     }
 
     return (
         <div className='CurrencyConvert'>
             <div className='CurrencyConvert-InputContainer'>
             <CurrencyInput 
-                data={props.data.from}
-                onChange={handleFromOnChange}/>
-            <button onClick={handleToFromCalc}> {'<'} </button>
+                title='продаваемая валюта'
+                onChange={handleFromOnChange}
+                onUserChangeVal={handleFromUserChangeVal}
+                />
             <div>--</div>
-            <button onClick={handleFromToCalc}> {'>'} </button>
             <CurrencyInput
-                data={props.data.to}
-                onChange={handleToOnChange}/>
+                title='покупаемая валюта'
+                onChange={handleToOnChange}
+                onUserChangeVal={handleToUserChangeVal}
+                />
             </div>
             <div className='CurrencyConvert-OptionsContainer'>
                 <div>

@@ -12,7 +12,7 @@ function App() {
   
 
 
-  const handleSdelka=(data: ICurrencyConvertData)=>{
+  const handleSdelka=()=>{
     alert('сделка');
   }
 
@@ -20,7 +20,6 @@ function App() {
     <div className="App">
       
       <CurrencyConvert 
-       data={data}
        onGo={handleSdelka}/>   
     </div>
   );

@@ -1,6 +1,9 @@
 .CurrencyInput{
     display:flex;
     flex-flow: row;
-    background-color: gray;
+    background-color: rgba(128, 128, 128, 0.584);
     max-width: fit-content;
+    border-color: white;
+    border-width: 2px;
+    border-style: solid;
 }
