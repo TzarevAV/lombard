@@ -1,0 +1,16 @@
+почему если в компоненте CurrencyInput в теге input установить value={data.value}
+ то значение input не меняется от значения по умолчанию?
+ 
+почему в компоненте CurrencyConvert 
+ const handleFastOptionsChange=(e:any)=>{
+        setIsFast(!isFast)
+        console.log('fast '+isFast+' '+e.target.checked);
+    }
+показывает 
+fast true false
+или 
+fast false true
+?
+
+как по нажатии на кнопку < или > обновить компонент CurrencyInput 
+с нужными данными?

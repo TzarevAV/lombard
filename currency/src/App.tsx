@@ -1,15 +1,27 @@
 import React from 'react';
 //import logo from './logo.svg';
 import './App.css';
-import { CurrencyConvert } from './CurrencyConvert';
+import { CurrencyConvert, ICurrencyConvertData } from './CurrencyConvert';
 
 function App() {
+  const data: ICurrencyConvertData={
+    from: {value: 0, valType: 0},
+    to:  {value: 0, valType: 0},
+    options: {premium: false, fast: false},
+  };
   
+
+
+  const handleSdelka=(data: ICurrencyConvertData)=>{
+    alert('сделка');
+  }
+
   return (
     <div className="App">
-      <h1>компонент преобразования валют</h1>
-      <CurrencyConvert />    
-     
+      
+      <CurrencyConvert 
+       data={data}
+       onGo={handleSdelka}/>   
     </div>
   );
 }

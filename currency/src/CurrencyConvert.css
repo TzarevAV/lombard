@@ -1,5 +1,19 @@
 .CurrencyConvert{
     display:flex;
+    flex-flow: column;
+    background-color: gray;
+    max-width: fit-content;
+}
+
+.CurrencyConvert-InputContainer{
+    display:flex;
+    flex-flow: row;
+    background-color: gray;
+    max-width: fit-content;
+}
+
+.CurrencyConvert-OptionsContainer{
+    display:flex;
     flex-flow: row;
     background-color: gray;
     max-width: fit-content;

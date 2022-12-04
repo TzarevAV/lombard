@@ -1,3 +1,6 @@
 .CurrencyInput{
+    display:flex;
+    flex-flow: row;
     background-color: gray;
+    max-width: fit-content;
 }
