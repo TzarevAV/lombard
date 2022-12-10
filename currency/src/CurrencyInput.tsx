@@ -5,8 +5,10 @@ import './CurrencyInput.css';
 
 export interface ICurrencyInputProps{
     title:string;
-    onChange:()=>void;
-    onUserChangeVal:()=>void;
+    val: number;
+    type: number;
+    onChangeType:(val:number)=>void;
+    onChangeVal:(val:number)=>void;
 }
 
 export function CurrencyInput(props: ICurrencyInputProps){
@@ -14,17 +16,17 @@ export function CurrencyInput(props: ICurrencyInputProps){
   //  const [inputVal, setInputVal] = useState(props.data.value); 
   //  const [inputTypeID, setInputTypeID] = useState(props.data.valType);
 
-    let handleValChange=(e: any)=>{
+    let handleChangeVal=(e: any)=>{
      //   props.data.value=e.target.value;
    //     setInputVal(props.data.value);
-    //    console.log('CurrencyInput: handleValChange '+props.data.valType+' '+props.data.value);
-        props.onChange();
+        console.log('CurrencyInput: handleValChange ');
+        props.onChangeVal(e.target.value);
     }
-    let handleValTypeChange=(e:any)=>{
+    let handleChangeType=(e:any)=>{
     //    props.data.valType=e.target.selectedIndex;
     //    setInputTypeID(e.target.selectedIndex)
-    //    console.log('CurrencyInput: handleValTypeChange '+props.data.valType);
-        props.onChange();
+        console.log('CurrencyInput: handleValTypeChange ');
+        props.onChangeType(e.target.selectedIndex);
 //        console.log(dataTmp.valType);
     }
     return ( 
@@ -34,13 +36,13 @@ export function CurrencyInput(props: ICurrencyInputProps){
                 type="number"
                 min={0} max={100000000}
                 name='val'
-                value={0}
+                value={props.val}
                 step={0.01} placeholder='что менять'
-                pattern='\d\d\d\d\d\d\d.\d\d' onChange={handleValChange}/>
-            <select name="cur" id="cur" onChange={handleValTypeChange}>
+                pattern='\d\d\d\d\d\d\d.\d\d' onChange={handleChangeVal}/>
+            <select name="cur" id="cur" onChange={handleChangeType}>
                 {currencyList.map((item, index)=>
                     <option key={index} value={index}
-                        selected={index===0}
+                        selected={index===props.type}
                     >{item}</option>
                 )}
             </select>

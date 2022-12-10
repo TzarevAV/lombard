@@ -1,19 +1,9 @@
 import React, { useState } from 'react';
-import { calculateExchange, CurrencySymbol, CurrencyVal, getKnownCurrencies, ICurrencyOptions } from './Currency.utils';
+import { calculateExchange, CurrencySymbol, CurrencyVal, getKnownCurrencies, ICurrencyOptions, ISdelkaData } from './Currency.utils';
 
 import './CurrencyConvert.css';
 import { CurrencyInput } from './CurrencyInput';
 
-
-
-
-
-export interface ICurrencyProps{
-    from: CurrencySymbol,
-    to: CurrencySymbol,
-    amount: number,
-    options: ICurrencyOptions
-}
 
 export interface ICurrencyConvertData{
     from: CurrencyVal;
@@ -22,44 +12,59 @@ export interface ICurrencyConvertData{
 }
 
 export interface ICurrencyConvertProps{
+    data:ICurrencyConvertData;
+    onChangeFromVal:(val:number)=>void;
+    onChangeToVal:(val:number)=>void;
+    onChangeFromType:(type:number)=>void;
+    onChangeToType:(type:number)=>void;
+    onChangePremium:(val:boolean)=>void;
+    onChangeFast:(val:boolean)=>void;
     onGo:()=>void;
     
 }
 
 export function CurrencyConvert(props: ICurrencyConvertProps){
-    const [isPremium, setIsPremium] = useState(false);
-    const [isFast, setIsFast] = useState(false);
+    //const [isPremium, setIsPremium] = useState(false);
+    //const [isFast, setIsFast] = useState(false);
 
     let handleGoClick=()=>{
         console.log('сделка');
         props.onGo();
     };
 
-    const handleFromUserChangeVal=()=>{
-        console.log('CurrencyConvert: handleFromUserChangeVal ');
+    const handleChangeFromVal=(val:number)=>{
+        console.log('CurrencyConvert: handleChangeFromVal ');
+        console.log(val);
+        props.onChangeFromVal(val);
     }
 
-    const handleToUserChangeVal=()=>{
-        console.log('CurrencyConvert: handleToUserChangeVal ');
+    const handleChangeToVal=(val:number)=>{
+        console.log('CurrencyConvert: handleChangeToVal ');
+        console.log(val);
+        props.onChangeToVal(val);
     }
 
-    let handleFromOnChange=()=>{
-
-        console.log('CurrencyConvert: handleFromOnChange ');
+    let handleChangeFromType=(val:number)=>{
+        console.log('CurrencyConvert: handleChangeFromType ');
+        console.log(val);
+        props.onChangeFromType(val);
     };
-    let handleToOnChange=()=>{
-
-        console.log('CurrencyConvert: handleToOnChange ');
+    let handleChangeToType=(val:number)=>{
+        console.log('CurrencyConvert: handleChangeToType ');
+        console.log(val);
+        props.onChangeToType(val);
     };
 
-    const handlePremiumOptionsChange=(e:any)=>{
-        setIsPremium(!isPremium);
-        console.log('premium '+isPremium+' '+e.target.checked);        
+    const handleChangePremium=(e:any)=>{
+//        setIsPremium(!isPremium);
+//        console.log('premium '+e.target.checked);
+        props.onChangePremium(e.target.checked);        
     }
 
-    const handleFastOptionsChange=(e:any)=>{
-        setIsFast(e.target.checked)
-        console.log('fast '+isFast+' '+e.target.checked);
+    const handleChangeFast=(e:any)=>{
+//        setIsFast(e.target.checked)
+//        console.log('fast '+isFast+' '+e.target.checked);
+        props.onChangeFast(e.target.checked);
     }
 
     const handleFromToCalc=()=>{
@@ -78,29 +83,33 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
             <div className='CurrencyConvert-InputContainer'>
             <CurrencyInput 
                 title='продаваемая валюта'
-                onChange={handleFromOnChange}
-                onUserChangeVal={handleFromUserChangeVal}
+                val={props.data.from.value}
+                type={props.data.from.valType}
+                onChangeVal={handleChangeFromVal}
+                onChangeType={handleChangeFromType}
                 />
             <div>--</div>
             <CurrencyInput
                 title='покупаемая валюта'
-                onChange={handleToOnChange}
-                onUserChangeVal={handleToUserChangeVal}
+                val={props.data.to.value}
+                type={props.data.to.valType}
+                onChangeVal={handleChangeToVal}
+                onChangeType={handleChangeToType}
                 />
             </div>
             <div className='CurrencyConvert-OptionsContainer'>
                 <div>
                     <input 
                         type="checkbox" id="premium" name="premium"
-                        checked={isPremium}
-                        onChange={handlePremiumOptionsChange}/>
+                        checked={props.data.options.premium}
+                        onChange={handleChangePremium}/>
                     <label htmlFor="premium">premium</label>    
                 </div>
                 <div>
                     <input
                         type="checkbox" id="fast" name="fast"
-                        checked={isFast}
-                        onChange={handleFastOptionsChange}/>
+                        checked={props.data.options.fast}
+                        onChange={handleChangeFast}/>
                     <label htmlFor="fast">быстро</label>    
                 </div>
             </div>

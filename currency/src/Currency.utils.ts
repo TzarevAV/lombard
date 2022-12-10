@@ -32,6 +32,14 @@ export function calculateExchange(
         return amount;
 }
 
+
+export interface ISdelkaData{
+    from: CurrencySymbol,
+    to: CurrencySymbol,
+    amount: number,
+    options: ICurrencyOptions,
+} 
+
 /**
  * Список доступных валют
  * @returns 
