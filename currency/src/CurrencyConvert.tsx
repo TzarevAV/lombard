@@ -36,11 +36,11 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
     };
 
     const handleFromUserChangeVal=()=>{
-
+        console.log('CurrencyConvert: handleFromUserChangeVal ');
     }
 
     const handleToUserChangeVal=()=>{
-
+        console.log('CurrencyConvert: handleToUserChangeVal ');
     }
 
     let handleFromOnChange=()=>{
@@ -49,7 +49,7 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
     };
     let handleToOnChange=()=>{
 
-        console.log('CurrencyConvert: handleFromOnChange ');
+        console.log('CurrencyConvert: handleToOnChange ');
     };
 
     const handlePremiumOptionsChange=(e:any)=>{
@@ -58,7 +58,7 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
     }
 
     const handleFastOptionsChange=(e:any)=>{
-        setIsFast(!isFast)
+        setIsFast(e.target.checked)
         console.log('fast '+isFast+' '+e.target.checked);
     }
 
