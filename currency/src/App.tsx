@@ -19,9 +19,12 @@ enum CalcTypeEn{
   IsToFrom,
 }
 
-function testOnCalc(data: ICurrencyConvertData, lastChange:LastChange):{calcType:CalcTypeEn, val:number} {
-  if(lastChange===LastChange.IsFromVal || lastChange===LastChange.IsFromType
-    || lastChange===LastChange.IsToType || lastChange===LastChange.IsOptions){
+function testOnCalc(data: ICurrencyConvertData, lastChange:LastChange, lastCalc:CalcTypeEn):{calcType:CalcTypeEn, val:number} {
+  if(lastChange===LastChange.IsFromVal 
+     || lastChange===LastChange.IsOptions
+     || (lastChange===LastChange.IsFromType && (lastCalc===CalcTypeEn.IsNone || lastCalc===CalcTypeEn.IsFromTo))
+     || (lastChange===LastChange.IsToType && (lastCalc===CalcTypeEn.IsNone || lastCalc===CalcTypeEn.IsFromTo))
+     ){
       const rs=calculateExchange(getKnownCurrencies()[data.from.valType], 
       getKnownCurrencies()[data.to.valType],
       data.from.value,
@@ -29,7 +32,10 @@ function testOnCalc(data: ICurrencyConvertData, lastChange:LastChange):{calcType
     );
     return {calcType: CalcTypeEn.IsFromTo, val: rs};
   }
-  if(lastChange===LastChange.IsToVal){
+  if(lastChange===LastChange.IsToVal
+    || (lastChange===LastChange.IsFromType && lastCalc===CalcTypeEn.IsToFrom)
+    || (lastChange===LastChange.IsToType && lastCalc===CalcTypeEn.IsToFrom)
+    ){
     const rs=calculateExchange(getKnownCurrencies()[data.to.valType], 
     getKnownCurrencies()[data.from.valType],
     data.to.value,
@@ -48,6 +54,7 @@ function App() {
   const [fromType, setFromType] = useState(0);
   const [toType, setToType] = useState(0);
   const [lastChange, setLastChange] = useState(LastChange.IsNone);
+  const [lastCalcType, setLastCalcType] = useState(CalcTypeEn.IsNone);
   const [isToTestCalc, setIsToTestCalc] = useState(false);
 
   const data: ICurrencyConvertData={
@@ -60,15 +67,17 @@ function App() {
     console.log('App: handleOnCalc '+val+' '+calcTypeM);
     if(calcTypeM===CalcTypeEn.IsFromTo){
       setToVal(val);
+      setLastCalcType(calcTypeM);
     }
     if(calcTypeM===CalcTypeEn.IsToFrom){
       setFromVal(val);
+      setLastCalcType(calcTypeM);
     }
   }
 
   if(isToTestCalc){
     setIsToTestCalc(false);
-    const rs=testOnCalc(data, lastChange);
+    const rs=testOnCalc(data, lastChange, lastCalcType);
     if(rs.calcType!==CalcTypeEn.IsNone) handleOnCalc(rs.calcType, rs.val);
   }
 
