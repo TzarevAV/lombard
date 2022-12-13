@@ -1,63 +1,65 @@
-export interface FieldState{
+import { Action } from "redux";
+
+export interface FieldState {
     value: string;
     focus: boolean;
 }
 
-const initialState: FieldState= {
+const initialState: FieldState = {
     value: '',
     focus: false
 }
 
-const SET='field/SET';
-type SET=typeof SET;
+enum FieldActionType {
+    SET = 'field/SET',
+    FOCUS = 'field/FOCUS',
+    BLUR = 'field/BLUR',
+}
 
-const FOCUS='field/FOCUS';
-type FOCUS=typeof FOCUS;
+interface BaseFieldAction extends Action<FieldActionType> {
+    type: FieldActionType
+}
 
-const BLUR='field/BLUR';
-type BLUR=typeof BLUR;
-
-export interface SetAction{
-    type: SET;
+export interface SetAction extends BaseFieldAction {
+    type: FieldActionType.SET;
     payload: string;
 }
 
-export interface FocusAction{
-    type: FOCUS;
+export interface FocusAction extends BaseFieldAction {
+    type: FieldActionType.FOCUS;
 }
 
-export interface BlurAction{
-    type: BLUR;
+export interface BlurAction extends BaseFieldAction {
+    type: FieldActionType.BLUR;
 }
 
 type FieldAction = SetAction | FocusAction | BlurAction;
 
-export default function reducer(state: FieldState=initialState, action:FieldAction):FieldState{
-    switch(action.type){
-        case SET:
-            return{
+export default function reducer(state: FieldState = initialState, action: FieldAction): FieldState {
+    switch (action.type) {
+        case FieldActionType.SET:
+            return {
                 ...state,
                 value: action.payload
             }
-            case FOCUS:
-                return{
-                    ...state,
-                    focus: true
-                }            
-            case BLUR:
-                return{
-                    ...state,
-                    focus: false
-                }            
-    
+        case FieldActionType.FOCUS:
+            return {
+                ...state,
+                focus: true,
+            }
+        case FieldActionType.BLUR:
+            return {
+                ...state,
+                focus: false,
+            }
     }
 }
 
-export const set = (payload: string):SetAction=>({
-    type: SET,
+export const set = (payload: string): SetAction => ({
+    type: FieldActionType.SET,
     payload
 })
 
-export const focus=():FocusAction=>({type:FOCUS});
+export const focus = (): FocusAction => ({ type: FieldActionType.FOCUS });
 
-export const blur=():BlurAction=>({type:BLUR});
+export const blur = (): BlurAction => ({ type: FieldActionType.BLUR });
