@@ -29,7 +29,7 @@ export function calculateExchange(
     amount: number,
     options: ICurrencyOptions
     ): number {
-        return amount;
+        return amount*2;
 }
 
 
