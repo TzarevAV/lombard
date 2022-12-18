@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
-import { CurrencyVal, getKnownCurrencies } from './Currency.utils';
+import React from 'react';
+import { getKnownCurrencies } from './Currency.utils';
 
 import './CurrencyInput.css';
+import { FieldState } from './redux';
 
 export interface ICurrencyInputProps{
+    state: FieldState;
+    
     title:string;
     val: number;
     type: number;
@@ -13,21 +16,13 @@ export interface ICurrencyInputProps{
 
 export function CurrencyInput(props: ICurrencyInputProps){
     let currencyList:string[]=getKnownCurrencies();
-  //  const [inputVal, setInputVal] = useState(props.data.value); 
-  //  const [inputTypeID, setInputTypeID] = useState(props.data.valType);
-
     let handleChangeVal=(e: any)=>{
-     //   props.data.value=e.target.value;
-   //     setInputVal(props.data.value);
         console.log('CurrencyInput: handleValChange ');
         props.onChangeVal(e.target.value);
     }
     let handleChangeType=(e:any)=>{
-    //    props.data.valType=e.target.selectedIndex;
-    //    setInputTypeID(e.target.selectedIndex)
         console.log('CurrencyInput: handleValTypeChange ');
         props.onChangeType(e.target.selectedIndex);
-//        console.log(dataTmp.valType);
     }
     return ( 
         <div className='CurrencyInput'>

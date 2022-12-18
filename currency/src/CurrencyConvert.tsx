@@ -1,18 +1,15 @@
-import React, { useState } from 'react';
-import { calculateExchange, CurrencySymbol, CurrencyVal, getKnownCurrencies, ICurrencyOptions, ISdelkaData } from './Currency.utils';
+import React from 'react';
 
 import './CurrencyConvert.css';
 import { CurrencyInput } from './CurrencyInput';
+import { FieldState } from './redux';
 
 
-export interface ICurrencyConvertData{
-    from: CurrencyVal;
-    to: CurrencyVal;
-    options: ICurrencyOptions;
-}
 
 export interface ICurrencyConvertProps{
-    data:ICurrencyConvertData;
+    state: FieldState;
+    name?: string;
+    counter?: number;
     onChangeFromVal:(val:number)=>void;
     onChangeToVal:(val:number)=>void;
     onChangeFromType:(type:number)=>void;
@@ -23,9 +20,7 @@ export interface ICurrencyConvertProps{
     
 }
 
-export function CurrencyConvert(props: ICurrencyConvertProps){
-    //const [isPremium, setIsPremium] = useState(false);
-    //const [isFast, setIsFast] = useState(false);
+export const CurrencyConvert:React.FC<ICurrencyConvertProps>=(props: ICurrencyConvertProps)=> {
 
     let handleGoClick=()=>{
         console.log('сделка');
@@ -56,43 +51,31 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
     };
 
     const handleChangePremium=(e:any)=>{
-//        setIsPremium(!isPremium);
-//        console.log('premium '+e.target.checked);
         props.onChangePremium(e.target.checked);        
     }
 
     const handleChangeFast=(e:any)=>{
-//        setIsFast(e.target.checked)
-//        console.log('fast '+isFast+' '+e.target.checked);
         props.onChangeFast(e.target.checked);
-    }
-
-    const handleFromToCalc=()=>{
-//        const val=calculateExchange(getKnownCurrencies()[0], getKnownCurrencies()[0], 0, props.data.options);
- 
-        console.log('calculated from-to ');
-    }
-    const handleToFromCalc=()=>{
-//        const val=calculateExchange(getKnownCurrencies()[props.data.to.valType], getKnownCurrencies()[props.data.from.valType], props.data.to.value, props.data.options);
-
-        console.log('calculated to-from ');
     }
 
     return (
         <div className='CurrencyConvert'>
             <div className='CurrencyConvert-InputContainer'>
+                
             <CurrencyInput 
+                state={props.state}
                 title='продаваемая валюта'
-                val={props.data.from.value}
-                type={props.data.from.valType}
+                val={props.state.fromVal}
+                type={props.state.fromType}
                 onChangeVal={handleChangeFromVal}
                 onChangeType={handleChangeFromType}
                 />
             <div>--</div>
             <CurrencyInput
+                state={props.state}
                 title='покупаемая валюта'
-                val={props.data.to.value}
-                type={props.data.to.valType}
+                val={props.state.toVal}
+                type={props.state.toType}
                 onChangeVal={handleChangeToVal}
                 onChangeType={handleChangeToType}
                 />
@@ -101,14 +84,14 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
                 <div>
                     <input 
                         type="checkbox" id="premium" name="premium"
-                        checked={props.data.options.premium}
+                        checked={props.state.isPremium}
                         onChange={handleChangePremium}/>
                     <label htmlFor="premium">premium</label>    
                 </div>
                 <div>
                     <input
                         type="checkbox" id="fast" name="fast"
-                        checked={props.data.options.fast}
+                        checked={props.state.isFast}
                         onChange={handleChangeFast}/>
                     <label htmlFor="fast">быстро</label>    
                 </div>
@@ -120,3 +103,4 @@ export function CurrencyConvert(props: ICurrencyConvertProps){
         </div>
     )
 }
+

@@ -1,166 +1,116 @@
 import React, { useState } from 'react';
-import { createSlice, configureStore } from '@reduxjs/toolkit';
-
 //import logo from './logo.svg';
 import './App.css';
-import { calculateExchange, CurrencySymbol, getKnownCurrencies, ICurrencyOptions, ISdelkaData } from './Currency.utils';
-import { CurrencyConvert, ICurrencyConvertData } from './CurrencyConvert';
+import { getKnownCurrencies, ISdelkaData } from './Currency.utils';
+import { CurrencyConvert } from './CurrencyConvert';
+import { createStore } from 'redux';
+import { initialState, LastChange } from './redux/store';
+import { Provider } from 'react-redux';
+import { createGoCalcAction, createIncrementCounterAction, 
+   createLastChangeAction, createSetFastAction, createSetFromTypeAction,
+    createSetFromValAction, createSetPremiumAction, createSetToTypeAction,
+     createSetToValAction } from './redux/actions';
+import { reducer } from './redux';
 
 
 
-enum LastChange{
-  IsNone=0,
-  IsFromVal,
-  IsFromType,
-  IsToVal,
-  IsToType,
-  IsOptions,
-}
+const store=createStore(reducer, initialState);
 
-enum CalcTypeEn{
-  IsNone=0,
-  IsFromTo,
-  IsToFrom,
-}
+const App: React.FC =()=> {
 
-function testOnCalc(data: ICurrencyConvertData, lastChange:LastChange, lastCalc:CalcTypeEn):{calcType:CalcTypeEn, val:number} {
-  if(lastChange===LastChange.IsFromVal 
-     || lastChange===LastChange.IsOptions
-     || (lastChange===LastChange.IsFromType && (lastCalc===CalcTypeEn.IsNone || lastCalc===CalcTypeEn.IsFromTo))
-     || (lastChange===LastChange.IsToType && (lastCalc===CalcTypeEn.IsNone || lastCalc===CalcTypeEn.IsFromTo))
-     ){
-      const rs=calculateExchange(getKnownCurrencies()[data.from.valType], 
-      getKnownCurrencies()[data.to.valType],
-      data.from.value,
-      data.options
-    );
-    return {calcType: CalcTypeEn.IsFromTo, val: rs};
-  }
-  if(lastChange===LastChange.IsToVal
-    || (lastChange===LastChange.IsFromType && lastCalc===CalcTypeEn.IsToFrom)
-    || (lastChange===LastChange.IsToType && lastCalc===CalcTypeEn.IsToFrom)
-    ){
-    const rs=calculateExchange(getKnownCurrencies()[data.to.valType], 
-    getKnownCurrencies()[data.from.valType],
-    data.to.value,
-    data.options
-  );
-    return {calcType: CalcTypeEn.IsToFrom, val: rs};
-  }
-  return {calcType: CalcTypeEn.IsNone, val: -1};
-}
+  const state=store.getState();
 
-const store=configureStore({
- reducer: 
-});
+  const [counter, setCounter] = useState(0);
 
-function App() {
-  const [isPremium, setIsPremium] = useState(false);
-  const [isFast, setIsFast] = useState(false);
-  const [fromVal, setFromVal] = useState(0);
-  const [toVal, setToVal] = useState(0);
-  const [fromType, setFromType] = useState(0);
-  const [toType, setToType] = useState(0);
-  const [lastChange, setLastChange] = useState(LastChange.IsNone);
-  const [lastCalcType, setLastCalcType] = useState(CalcTypeEn.IsNone);
-  const [isToTestCalc, setIsToTestCalc] = useState(false);
 
-  const data: ICurrencyConvertData={
-    from: {value: fromVal, valType: fromType},
-    to:  {value: toVal, valType: toType},
-    options: {premium: isPremium, fast: isFast},
+  const subscriber=()=>{
+    console.log('subscriber');
+    console.log(store.getState().counter);
+    setCounter(store.getState().counter);
+    return;
   };
 
-  const handleOnCalc=(calcTypeM:CalcTypeEn, val:number)=>{
-    console.log('App: handleOnCalc '+val+' '+calcTypeM);
-    if(calcTypeM===CalcTypeEn.IsFromTo){
-      setToVal(val);
-      setLastCalcType(calcTypeM);
-    }
-    if(calcTypeM===CalcTypeEn.IsToFrom){
-      setFromVal(val);
-      setLastCalcType(calcTypeM);
-    }
+  if(!counter) 
+    store.subscribe(subscriber);
+  
+    
+  if(state.isToCalc){
+    store.dispatch(createGoCalcAction());
   }
-
-  if(isToTestCalc){
-    setIsToTestCalc(false);
-    const rs=testOnCalc(data, lastChange, lastCalcType);
-    if(rs.calcType!==CalcTypeEn.IsNone) handleOnCalc(rs.calcType, rs.val);
-  }
-
-
+  
+ 
   const handleChangeFromVal=(val:number)=>{
     console.log('App: handleChangeFromVal '+val);
-    setFromVal(val);
-    setLastChange(LastChange.IsFromVal)
-    setIsToTestCalc(true);
+    store.dispatch(createSetFromValAction(val));
+    store.dispatch(createLastChangeAction(LastChange.IsFromVal));
 }
 
 const handleChangeToVal=(val:number)=>{
     console.log('App: handleChangeToVal '+val);
-    setToVal(val);
-    setLastChange(LastChange.IsToVal)
-    setIsToTestCalc(true);
+    store.dispatch(createSetToValAction(val));
+    store.dispatch(createLastChangeAction(LastChange.IsToVal));
+
 }
 
 const handleChangeFromType=(val:number)=>{
     console.log('App: handleChangeFromType ');
-    setFromType(val);
-    setLastChange(LastChange.IsFromType)
-    setIsToTestCalc(true);
+    store.dispatch(createSetFromTypeAction(val));
+    store.dispatch(createLastChangeAction(LastChange.IsFromType));
 };
 const handleChangeToType=(val:number)=>{
     console.log('App: handleChangeToType ');
-    setToType(val);
-    setLastChange(LastChange.IsToType)
-    setIsToTestCalc(true);
+    store.dispatch(createSetToTypeAction(val));
+    store.dispatch(createLastChangeAction(LastChange.IsToType));
 };
 
 const handleChangePremium=(val:boolean)=>{
-  setIsPremium(val);
-//  data.options.premium=val;
-  console.log('App:  handleChangePremium '+val); 
-  setLastChange(LastChange.IsOptions)       
-  setIsToTestCalc(true);
+  store.dispatch(createSetPremiumAction(val));
+  console.log('App:  handleChangePremium '+val);    
+  store.dispatch(createLastChangeAction(LastChange.IsOptions));
 }
 
 const handleChangeFast=(val:boolean)=>{
-  setIsFast(val);
+  store.dispatch(createSetFastAction(val));
   console.log('App:  handleChangeFast '+val);
-  setLastChange(LastChange.IsOptions)
-  setIsToTestCalc(true);
+  store.dispatch(createLastChangeAction(LastChange.IsOptions));
 }
 
 
   const handleSdelka=()=>{
     const dat: ISdelkaData={
-      from: getKnownCurrencies()[data.from.valType],
-      to: getKnownCurrencies()[data.to.valType],
-      amount: data.from.value,
-      options: data.options
+      from: getKnownCurrencies()[state.fromType],
+      to: getKnownCurrencies()[state.toType],
+      amount: state.fromVal,
+      options: { premium: state.isPremium,  fast: state.isFast}
     };
+    store.dispatch(createIncrementCounterAction());
     alert('сделка');
     console.log('сделка');
     console.log(dat);
   }
+  
 
   return (
-   
+    <Provider store={store}>
     <div className="App">
-      
-      <CurrencyConvert 
-       data={data}
+      <div>test</div>
+      <div>
+        {store.getState().name+' '}
+        {store.getState().counter}
+      </div>
+     <CurrencyConvert 
+       state={store.getState()}
        onChangeFromVal={handleChangeFromVal}
        onChangeToVal={handleChangeToVal}
        onChangeFromType={handleChangeFromType}
        onChangeToType={handleChangeToType}
        onChangePremium={handleChangePremium}
        onChangeFast={handleChangeFast}
-       onGo={handleSdelka}/>   
-    </div>
-  
+       onGo={handleSdelka}/>  
+    </div> 
+    </Provider>
   );
 }
 
 export default App;
+
