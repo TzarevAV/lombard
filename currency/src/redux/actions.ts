@@ -1,7 +1,7 @@
 
 import { Action } from "redux";
 
-enum ActionEnum {
+export enum ActionEnum {
     INCREMENT_COUNTER = 'INCREMENT_COUNTER',
     SET_NAME = 'SET_NAME'
 }
@@ -21,5 +21,13 @@ export interface SetNameAction extends BaseFieldAction {
 
 export type FieldAction = IncrementCounterAction | SetNameAction;
 
+export const createIncrementCounterAction=():IncrementCounterAction=>({
+    type: ActionEnum.INCREMENT_COUNTER,
+});
+
+export const createSetNameAction=(name: string):SetNameAction=>({
+    type: ActionEnum.SET_NAME,
+    payload: name
+});
 
 
