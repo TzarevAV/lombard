@@ -81,24 +81,25 @@ export const CurrencyConvert:React.FC<ICurrencyConvertProps>=(props: ICurrencyCo
                 />
             </div>
             <div className='CurrencyConvert-OptionsContainer'>
-                <div>
+                <div className='CurrencyConvert-OptionsItem'>
                     <input 
                         type="checkbox" id="premium" name="premium"
                         checked={props.state.isPremium}
                         onChange={handleChangePremium}/>
                     <label htmlFor="premium">premium</label>    
                 </div>
-                <div>
+                <div className='CurrencyConvert-OptionsItem'>
                     <input
                         type="checkbox" id="fast" name="fast"
                         checked={props.state.isFast}
                         onChange={handleChangeFast}/>
                     <label htmlFor="fast">быстро</label>    
-                </div>
+                </div>    
             </div>
-            <div>
-                <button onClick={handleGoClick} > сделка </button>
+            <div className='CurrencyConvert-OptionsItem'>
+                    <button onClick={handleGoClick} > сделка </button>
             </div>
+            
             
         </div>
     )
