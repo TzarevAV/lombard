@@ -93,11 +93,7 @@ const handleChangeFast=(val:boolean)=>{
   return (
     <Provider store={store}>
     <div className="App">
-      <div>test</div>
-      <div>
-        {store.getState().name+' '}
-        {store.getState().counter}
-      </div>
+      
      <CurrencyConvert 
        state={store.getState()}
        onChangeFromVal={handleChangeFromVal}
