@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
+import { createSlice, configureStore } from '@reduxjs/toolkit';
+
 //import logo from './logo.svg';
 import './App.css';
 import { calculateExchange, CurrencySymbol, getKnownCurrencies, ICurrencyOptions, ISdelkaData } from './Currency.utils';
 import { CurrencyConvert, ICurrencyConvertData } from './CurrencyConvert';
+
+
 
 enum LastChange{
   IsNone=0,
@@ -45,6 +49,10 @@ function testOnCalc(data: ICurrencyConvertData, lastChange:LastChange, lastCalc:
   }
   return {calcType: CalcTypeEn.IsNone, val: -1};
 }
+
+const store=configureStore({
+ reducer: 
+});
 
 function App() {
   const [isPremium, setIsPremium] = useState(false);
@@ -138,6 +146,7 @@ const handleChangeFast=(val:boolean)=>{
   }
 
   return (
+   
     <div className="App">
       
       <CurrencyConvert 
@@ -150,6 +159,7 @@ const handleChangeFast=(val:boolean)=>{
        onChangeFast={handleChangeFast}
        onGo={handleSdelka}/>   
     </div>
+  
   );
 }
 

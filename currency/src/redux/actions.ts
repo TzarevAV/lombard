@@ -1,0 +1,8 @@
+
+enum ActionEnum {
+    INCREMENT_COUNTER = 'INCREMENT_COUNTER',
+    SET_NAME = 'SET_NAME'
+}
+
+
+
