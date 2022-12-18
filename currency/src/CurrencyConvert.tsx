@@ -95,10 +95,11 @@ export const CurrencyConvert:React.FC<ICurrencyConvertProps>=(props: ICurrencyCo
                         onChange={handleChangeFast}/>
                     <label htmlFor="fast">быстро</label>    
                 </div>    
-            </div>
-            <div className='CurrencyConvert-OptionsItem'>
+                <div className='CurrencyConvert-OptionsItem'>
                     <button onClick={handleGoClick} > сделка </button>
+                </div>
             </div>
+            
             
             
         </div>

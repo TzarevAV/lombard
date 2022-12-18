@@ -21,6 +21,11 @@
     margin: 10px;
 }
 
+.CurrencyConvert-OptionsItem{
+   flex: 1 1 auto;
+   margin: 10px;
+}
+
 CurrencyConvert :on_hover{
     background-color: white;
 
