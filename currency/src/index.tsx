@@ -10,7 +10,7 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
-);
+); 
 
 const store = createStore(reducer, initialState, composeWithDevTools(applyMiddleware()));
 
